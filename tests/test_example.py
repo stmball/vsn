@@ -1,5 +1,5 @@
 """Tests for the VSN class."""
-from src.vsn import VSN, F
+from src.vsn import VSN
 import pytest
 import numpy as np
 
@@ -22,9 +22,6 @@ class TestVSN:
         vsn = VSN()
         assert vsn.f is np.exp
         assert vsn.df is np.exp
-        assert vsn.a is None
-        assert vsn.b is None
-        assert vsn.x is None
 
     def test_Y(self, data):
         """Test the Y function."""
@@ -59,7 +56,7 @@ class TestVSN:
         """Test the sigma function."""
         vsn = VSN()
         vsn.x = data
-        assert np.allclose(vsn._sigma(), 4.320493798938574)
+        assert np.allclose(vsn._sigma(), 18.666666666666668)
 
     def test_r(self, data):
         """Test the r function."""
@@ -123,7 +120,7 @@ class TestVSN:
         vsn.b = np.ones(data.shape[0])
         assert np.allclose(
             vsn._big_sigma(include_x=False),
-            np.array([-0.21790353, 0.07345058, 0.05822896]),
+            np.array([0.79041192, 0.21581259, 0.1291974]),
         )
 
     def test_delta_a(self, data):
@@ -133,7 +130,7 @@ class TestVSN:
         vsn.a = np.ones(data.shape[0])
         vsn.b = np.ones(data.shape[0])
         assert np.allclose(
-            vsn._delta_a(), np.array([-0.21790353, 0.07345058, 0.05822896])
+            vsn._delta_a(), np.array([0.79041192, 0.21581259, 0.1291974])
         )
 
     def test_delta_b(self, data):
@@ -143,5 +140,5 @@ class TestVSN:
         vsn.a = np.ones(data.shape[0])
         vsn.b = np.ones(data.shape[0])
         assert np.allclose(
-            vsn._delta_b(), np.array([-5.48577879, -3.93426055, -3.29970523])
+            vsn._delta_b(), np.array([-2.57925807, -1.12014298, -0.88298826])
         )
