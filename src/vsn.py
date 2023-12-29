@@ -3,6 +3,7 @@ import numpy as np
 import numpy.typing as npt
 from sklearn.base import BaseEstimator, TransformerMixin
 from enum import Enum
+import typing as tp
 
 
 class F(Enum):
@@ -26,7 +27,7 @@ class VSN(BaseEstimator, TransformerMixin):
         self.f = np.exp if f is F.EXP else lambda x: x
         self.df = np.exp if f is F.EXP else lambda _: 1
 
-    def fit(self, x: npt.ArrayLike, tol: float = 1e-6, max_iter=1000) -> None:
+    def fit(self, x: npt.NDArray, tol: float = 1e-6, max_iter=1000) -> None:
         """Fit the VSN to the data.
 
         Args:
@@ -40,7 +41,7 @@ class VSN(BaseEstimator, TransformerMixin):
 
         self._fit(tol, max_iter)
 
-    def transform(self, x: npt.ArrayLike) -> npt.NDArray:
+    def transform(self, x: npt.NDArray) -> npt.NDArray:
         """Transform the data using the fitted VSN.
 
         Args:
@@ -51,7 +52,7 @@ class VSN(BaseEstimator, TransformerMixin):
         """
         return self._h(x)
 
-    def fit_transform(self, x: npt.ArrayLike) -> npt.NDArray:
+    def fit_transform(self, x: npt.NDArray) -> npt.NDArray:
         """Both fit and transform the data.
 
         Args:
@@ -63,7 +64,7 @@ class VSN(BaseEstimator, TransformerMixin):
         self.fit(x)
         return self.transform(x)
 
-    def _h(self, x: npt.ArrayLike = None) -> npt.NDArray:
+    def _h(self, x: tp.Optional[npt.NDArray] = None) -> npt.NDArray:
         """Calculate the h function.
 
         Args:
@@ -96,7 +97,7 @@ class VSN(BaseEstimator, TransformerMixin):
         """
         return np.mean(self.x, axis=0)
 
-    def _sigma(self) -> npt.NDArray:
+    def _sigma(self) -> np.float64:
         """Calculate the standard deviation of all the data.
 
         Returns:
@@ -163,7 +164,7 @@ class VSN(BaseEstimator, TransformerMixin):
         self.a += self._delta_a()
         self.b += self._delta_b()
 
-    def _converged(self, tol: float) -> bool:
+    def _converged(self, tol: float) -> np.bool_:
         """Decide if the gradient descent has converged.
 
         Args:
